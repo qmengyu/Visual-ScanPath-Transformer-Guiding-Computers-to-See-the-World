@@ -12,12 +12,12 @@ imgspath = '/data/03-scanpath/datasets_new/SALICON/images/val_5000/'
 imgspathdir = os.listdir(imgspath)  # 列出文件夹下图片文件名（训练数据集）
 predspathdir = os.listdir(predspath)  # 列出文件夹下图片文件名（训练数据集）
 
-img_num = len(predspathdir)
+img_num = len(imgspathdir)
 
 for img_i in range(img_num):
     # if img_i %100 == 1:
     print(img_i)
-    pred_name = predspathdir[img_i]
+    pred_name = imgspathdir[img_i][:-4] + '.mat'
     pred_path = os.path.join(predspath, pred_name)
 
     pred_fixations = scio.loadmat(pred_path)
@@ -25,7 +25,7 @@ for img_i in range(img_num):
 
     image_name = imgspathdir[img_i]
     image_path = os.path.join(imgspath, image_name)
-
+    save_path = os.path.join('/data/qmy/seq_img_salicon/', image_name[:-4], 'GroundTruth.jpg')
     img = mpimg.imread(image_path)
     plt.imshow(img)
 
@@ -40,14 +40,14 @@ for img_i in range(img_num):
     for i in range(0, len(seq)):
         if i == 0:
             color = 'steelblue'
-        elif i == len(seq)-1:
+        elif i == len(seq) - 1:
             color = 'brown'
         else:
             color = 'w'
         plt.scatter(seq[i][1], seq[i][0], s=400, c=color, alpha=0.5, linewidths=[1], edgecolors="k")  #
-        plt.text(seq[i][1], seq[i][0], i+1, ha='center', va='center', fontsize=9, color="k")
+        plt.text(seq[i][1], seq[i][0], i + 1, ha='center', va='center', fontsize=9, color="k")
 
     plt.axis('off')
-    plt.show()
+    plt.savefig(save_path, dpi=300, bbox_inches='tight', pad_inches=-0.1)
     plt.cla()
-    break
+
